@@ -1,1 +1,4 @@
-.metadat/*
+.DS_Store
+/RemoteSystemsTempFiles/
+/.metadata/
+/Percolation/bin/
