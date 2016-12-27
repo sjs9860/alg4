@@ -73,7 +73,7 @@ public class PercolationStats {
 
     // low endpoint of 95% confidence interval
     public double confidenceLo() {
-        if (stddev() == Double.NaN) {
+        if (Double.isNaN(stddev())) {
             return Double.NaN;
         }
         return mean() - stddev() * 1.96 / Math.sqrt(numTrails);
@@ -81,7 +81,7 @@ public class PercolationStats {
 
     // high endpoint of 95% confidence interval
     public double confidenceHi() {
-        if (stddev() == Double.NaN) {
+        if (Double.isNaN(stddev())) {
             return Double.NaN;
         }
         return mean() + stddev() * 1.96 / Math.sqrt(numTrails);
