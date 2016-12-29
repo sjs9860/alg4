@@ -23,6 +23,8 @@ public class Percolation {
     private WeightedQuickUnionUF dj;
     // size of map
     private int sizeN;
+    // number of opened sites
+    private int numOfOpened;
 
     // create n-by-n grid, with all sites blocked
     public Percolation(int n) {
@@ -31,6 +33,7 @@ public class Percolation {
                     "The size of metrix should be great or equal to 0");
         }
         sizeN = n;
+        numOfOpened = 0;
         map = new boolean[n + 1][n + 1];
         dj = new WeightedQuickUnionUF(n * n + 2);
     }
@@ -38,6 +41,7 @@ public class Percolation {
     // open site (row, col) if it is not open already
     public void open(int row, int col) {
         validate(row, col);
+        numOfOpened++;
         map[row][col] = true;
         int indexCurr = (row - 1) * sizeN + col;
         if (indexCurr <= sizeN) {
@@ -68,6 +72,11 @@ public class Percolation {
         int index = (row - 1) * sizeN + col;
         return map[row][col] && dj.connected(index, 0);
     }
+    
+    // number of open sites
+    public int numberOfOpenSites() {
+    	return numOfOpened;
+    }
 
     // does the system percolate?
     public boolean percolates() {
@@ -89,17 +98,22 @@ public class Percolation {
     // test client
     public static void main(String[] args) {
         Percolation p = new Percolation(3);
+        System.out.println(p.numberOfOpenSites());
         System.out.println("Is (1,2) open? " + p.isOpen(1, 2));
         p.open(1, 3);
         p.open(2, 3);
+        System.out.println(p.numberOfOpenSites());
         System.out.println("Is (2,3) open? " + p.isOpen(2, 3));
         System.out.println("Is (2,3) full? " + p.isFull(2, 3));
         p.open(2, 1);
+        System.out.println(p.numberOfOpenSites());
         System.out.println("Is (2,1) open? " + p.isOpen(2, 1));
         System.out.println("Is (2,1) full? " + p.isFull(2, 1));
         p.open(3, 3);
+        System.out.println(p.numberOfOpenSites());
         System.out.println("Is 3*3 percolated? " + p.percolates());
         p.open(3, 1);
+        System.out.println(p.numberOfOpenSites());
         System.out.println("Is (3,1) open? " + p.isOpen(2, 1));
         System.out.println("Is (3,1) full? " + p.isFull(2, 1));        
     }
