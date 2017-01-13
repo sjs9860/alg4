@@ -24,27 +24,27 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 public class RandomizedQueue<Item> implements Iterable<Item> {
-    private Item[] a;         // array of items
-    private int n;            // number of elements on stack
-	
-	// construct an empty randomized queue
-	public RandomizedQueue() {
+    private Item[] a; // array of items
+    private int n; // number of elements on stack
+
+    // construct an empty randomized queue
+    public RandomizedQueue() {
         a = (Item[]) new Object[2];
         n = 0;
-	}
-	
-	// is the queue empty?
-	public boolean isEmpty() {
-		return n == 0;
-	}
-	
-	// return the number of items on the queue
-	public int size() {
-		return n;
-	}
+    }
 
-	// Copyright to algs4.cs.princeton.edu ResizingArrayStack.java.
-	// resize the underlying array holding the elements
+    // is the queue empty?
+    public boolean isEmpty() {
+        return n == 0;
+    }
+
+    // return the number of items on the queue
+    public int size() {
+        return n;
+    }
+
+    // Copyright to algs4.cs.princeton.edu ResizingArrayStack.java.
+    // resize the underlying array holding the elements
     private void resize(int capacity) {
         assert capacity >= n;
 
@@ -55,43 +55,48 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         }
         a = temp;
 
-       // alternative implementation
-       // a = java.util.Arrays.copyOf(a, capacity);
+        // alternative implementation
+        // a = java.util.Arrays.copyOf(a, capacity);
     }
+
     // end copy
 
-	// add the item
-	public void enqueue(Item item) {
-		if(n == a.length) resize(2*n);
-		a[n++] = item;
-	}
-	
-	// remove and return a random item
-	public Item dequeue() {
-		if (isEmpty()) throw new NoSuchElementException("Randomized Queue underflow");
-		int randomIndex = StdRandom.uniform(n);
-		Item item = a[randomIndex];
-		if(randomIndex != n-1) {
-			a[randomIndex] = a[n-1];
-		}
-		a[n-1] = null;
-		n--;
-		if(n > 0 && n == a.length / 4) {
-			resize(a.length / 2);
-		}
-		return item;
-	}
-	
-	// return (but do not remove) a random item
-	public Item sample() {
-		if (isEmpty()) throw new NoSuchElementException("Randomized Queue underflow");
-		int randomIndex = StdRandom.uniform(n);
-		return a[randomIndex];
-	}
+    // add the item
+    public void enqueue(Item item) {
+        if (n == a.length)
+            resize(2 * n);
+        a[n++] = item;
+    }
 
-	// Copyright to algs4.cs.princeton.edu LinkedStack.java.
+    // remove and return a random item
+    public Item dequeue() {
+        if (isEmpty())
+            throw new NoSuchElementException("Randomized Queue underflow");
+        int randomIndex = StdRandom.uniform(n);
+        Item item = a[randomIndex];
+        if (randomIndex != n - 1) {
+            a[randomIndex] = a[n - 1];
+        }
+        a[n - 1] = null;
+        n--;
+        if (n > 0 && n == a.length / 4) {
+            resize(a.length / 2);
+        }
+        return item;
+    }
+
+    // return (but do not remove) a random item
+    public Item sample() {
+        if (isEmpty())
+            throw new NoSuchElementException("Randomized Queue underflow");
+        int randomIndex = StdRandom.uniform(n);
+        return a[randomIndex];
+    }
+
+    // Copyright to algs4.cs.princeton.edu LinkedStack.java.
     /**
      * Returns a string representation of this queue.
+     * 
      * @return the sequence of items in FIFO order, separated by spaces
      */
     public String toString() {
@@ -99,84 +104,91 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         for (Item item : this)
             s.append(item + " ");
         return s.toString();
-    } 
+    }
+
     // end copy
-    
-	// return an independent iterator over items in random order
-	public Iterator<Item> iterator() {
-		return new RandomQueueIterator();
-	}
-	
-	private class RandomQueueIterator implements Iterator<Item> {
-		// 
-		Item[] iterArr;
-		int iterCap;
-		public RandomQueueIterator() {
-			iterCap = n;
-			iterArr = (Item[]) new Object[n];
-			for(int i = 0; i < n; i ++) {
-				iterArr[i] = a[i]; 
-			}
-		}
-		public boolean hasNext() {
-			return iterCap > 0;
-		}
-		public void remove() {
-			throw new UnsupportedOperationException();
-		}
-		public Item next() {
-			if (isEmpty()) throw new NoSuchElementException("Randomized Queue underflow");
-			int length = iterArr.length;
-			int index = StdRandom.uniform(iterCap);
-			Item item = iterArr[index];
-			if(index < iterCap -1) {
-				iterArr[index] = iterArr[iterCap - 1];
-			}
-			iterArr[iterCap - 1] = null;
-			iterCap --;
-			return item;
-		}
-	}
-	
-	// unit testing (optional)
-	public static void main(String[] args) {
-		RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
-		
-		// enque 0 to 9
-		for(int i = 0; i < 10; i++) {
-			rq.enqueue(i);
-		}
-		
-		// iterator test
-		Iterator<Integer> iter = rq.iterator();
-		while(iter.hasNext()) {
-			System.out.print(iter.next());
-		}
-		System.out.println();
-		
-		rq.dequeue();
-		rq.dequeue();
-		
-		// another independent iterator
-		Iterator<Integer> iter2 = rq.iterator();
-		while(iter2.hasNext()) {
-			System.out.print(iter2.next());
-		}
-		System.out.println();
-		
-		// sample test
-		for(int i = 0; i < 3; i++) {
-			System.out.println((i+1) + ") 4 consecutive samples");
-			for(int j = 0; j < 4; j ++) {
-				System.out.print(rq.sample() + " ");
-			}
-			System.out.print("\n");
-		}
-		
-		// dequeue test
-		while(!rq.isEmpty()) {
-			rq.dequeue();
-			System.out.println();
-		}
-	}
+
+    // return an independent iterator over items in random order
+    public Iterator<Item> iterator() {
+        return new RandomQueueIterator();
+    }
+
+    private class RandomQueueIterator implements Iterator<Item> {
+        // Item array to store all current items
+        private Item[] iterArr;
+        // Number of current items
+        private int iterCap;
+
+        public RandomQueueIterator() {
+            iterCap = n;
+            iterArr = (Item[]) new Object[n];
+            for (int i = 0; i < n; i++) {
+                iterArr[i] = a[i];
+            }
+        }
+
+        public boolean hasNext() {
+            return iterCap > 0;
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
+
+        public Item next() {
+            if (isEmpty())
+                throw new NoSuchElementException("Randomized Queue underflow");
+            int length = iterArr.length;
+            int index = StdRandom.uniform(iterCap);
+            Item item = iterArr[index];
+            if (index < iterCap - 1) {
+                iterArr[index] = iterArr[iterCap - 1];
+            }
+            iterArr[iterCap - 1] = null;
+            iterCap--;
+            return item;
+        }
+    }
+
+    // unit testing (optional)
+    public static void main(String[] args) {
+        RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
+
+        // enque 0 to 9
+        for (int i = 0; i < 10; i++) {
+            rq.enqueue(i);
+        }
+
+        // iterator test
+        Iterator<Integer> iter = rq.iterator();
+        while (iter.hasNext()) {
+            System.out.print(iter.next());
+        }
+        System.out.println();
+
+        rq.dequeue();
+        rq.dequeue();
+
+        // another independent iterator
+        Iterator<Integer> iter2 = rq.iterator();
+        while (iter2.hasNext()) {
+            System.out.print(iter2.next());
+        }
+        System.out.println();
+
+        // sample test
+        for (int i = 0; i < 3; i++) {
+            System.out.println((i + 1) + ") 4 consecutive samples");
+            for (int j = 0; j < 4; j++) {
+                System.out.print(rq.sample() + " ");
+            }
+            System.out.print("\n");
+        }
+
+        // dequeue test
+        while (!rq.isEmpty()) {
+            rq.dequeue();
+            System.out.println();
+        }
+    }
 }
