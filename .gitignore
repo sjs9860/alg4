@@ -1,4 +1,6 @@
 .DS_Store
 /RemoteSystemsTempFiles/
 /.metadata/
-/Percolation/bin/
+/*/bin/
+/*/src/*.class
+/*/src/*.zip
